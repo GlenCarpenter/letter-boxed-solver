@@ -1,4 +1,3 @@
-import './style.css'
 import { setupList } from './lists.ts'
 import { initTrie } from './init.ts'
 import wordsData from "./data/words_array.json"
@@ -8,55 +7,6 @@ import { containsAllLetters, getWordsBySide, sortArrayByLength } from './lbSolve
 const { data } = wordsData as { data: string[] }
 
 const trie = initTrie(data)
-
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <img src="/public/lb-favicon.ico">
-    <h1>Letter Boxed Solver</h1>
-    <div>
-      <form id="letter-form">
-        <formfield>
-          <legend>Top</legend>
-          <div class="row">
-            <input maxlength=1 required type="text" name="top-1"></input>
-            <input maxlength=1 required type="text" name="top-2"></input>
-            <input maxlength=1 required type="text" name="top-3"></input>
-          </div>
-        </formfield>
-        <formfield>
-          <legend>Left</legend>
-          <div class="row">
-            <input maxlength=1 required type="text" name="left-1"></input>
-            <input maxlength=1 required type="text" name="left-2"></input>
-            <input maxlength=1 required type="text" name="left-3"></input>
-          </div>
-        </formfield>
-        <formfield>
-          <legend>Right</legend>
-          <div class="row">
-            <input maxlength=1 required type="text" name="right-1"></input>
-            <input maxlength=1 required type="text" name="right-2"></input>
-            <input maxlength=1 required type="text" name="right-3"></input>
-          </div>
-        </formfield>
-        <formfield>
-          <legend>Bottom</legend>
-          <div class="row">
-            <input maxlength=1 required type="text" name="bottom-1"></input>
-            <input maxlength=1 required type="text" name="bottom-2"></input>
-            <input maxlength=1 required type="text" name="bottom-3"></input>
-          </div>
-        </formfield>
-        <button type="submit">Submit</button>
-      </form>
-    </div>
-    <div class="card-container">
-      <div class="card">
-        <ul id="list-0"></ul>
-      </div>
-    </div>
-  </div>
-`
 
 const form: HTMLFormElement = document.getElementById("letter-form") as HTMLFormElement
 form?.addEventListener("submit", (e: SubmitEvent) => {
