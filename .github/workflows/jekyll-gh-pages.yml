@@ -38,7 +38,7 @@ jobs:
           # The version of Node.js that will be used
             node-version: 18
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
       - name: Build
         run: pnpm run build
       - name: Setup Pages
