@@ -76,6 +76,7 @@ form?.addEventListener("submit", (e: SubmitEvent) => {
 
 })
 
+// Autofocus logic
 const top1 = document.getElementById("top-1")
 const top2 = document.getElementById("top-2")
 const top3 = document.getElementById("top-3")
