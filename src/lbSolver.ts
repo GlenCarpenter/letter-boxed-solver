@@ -40,7 +40,7 @@ const findWordsByPrefix = ({ prefix, letters, currentSide, trie, words }: FindBy
     return words
 }
 
-const sortArrayByLength = (arr: string[]) => arr.sort(function (a: string, b: string) {
+export const sortArrayByLength = (arr: string[]) => arr.sort(function (a: string, b: string) {
     return b.length - a.length
 })
 
@@ -58,4 +58,31 @@ export const getWordsBySide = (trie: Trie, letters: Letters, currentSide: number
     })
 
     return sortArrayByLength(words.filter(onlyUnique))
+}
+
+export const getBinaryMask = (word: string): string => {
+    let mask: string[] = []
+    for(let m = 0; m < 26; m++){
+        mask.push("0")
+    }
+    for (let i = 0; i < word.length; i++) {
+        let idx = word.charCodeAt(i) - 97
+        mask[25 - idx] = "1"
+    }
+
+    const maskString = mask.join("")
+
+    return maskString
+}
+
+export const containsAllLetters = (
+    letters: string[],
+    wordA: string,
+    wordB: string): boolean => {
+
+    const lettersMask = parseInt(getBinaryMask(letters.join("")), 2)
+    const maskA = parseInt(getBinaryMask(wordA), 2)
+    const maskB = parseInt(getBinaryMask(wordB), 2)
+
+    return (maskA | maskB) === lettersMask
 }

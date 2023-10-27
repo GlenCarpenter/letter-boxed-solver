@@ -1,33 +1,55 @@
 import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
 import { setupList } from './lists.ts'
 import { initTrie } from './init.ts'
 import wordsData from "./data/words_array.json"
-import dictionaryData from "./data/dictionary.json"
-import { getWordsBySide } from './lbSolver.ts'
+import { containsAllLetters, getWordsBySide, sortArrayByLength } from './lbSolver.ts'
 
-
-const letters: Array<string[]> = [
-  ["i", "o", "u"], ["n", "m", "k"], ["s", "a", "l"], ["t", "c", "r"],
-]
 
 const { data } = wordsData as { data: string[] }
-const { dictionary } = dictionaryData as { dictionary: string[] }
 
-const lowerDictionary = dictionary.map(el => el.toLowerCase())
-const trie = initTrie(lowerDictionary)
-
+const trie = initTrie(data)
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
+    <h1>Letter Boxed Solver</h1>
+    <div>
+    <form id="letter-form">
+      <formfield>
+        <legend>Top</legend>
+        <div class="row">
+          <input maxlength=1 required type="text" name="top-1"></input>
+          <input maxlength=1 required type="text" name="top-2"></input>
+          <input maxlength=1 required type="text" name="top-3"></input>
+        </div>
+      </formfield>
+      <formfield>
+        <legend>Left</legend>
+        <div class="row">
+          <input maxlength=1 required type="text" name="left-1"></input>
+          <input maxlength=1 required type="text" name="left-2"></input>
+          <input maxlength=1 required type="text" name="left-3"></input>
+        </div>
+      </formfield>
+      <formfield>
+        <legend>Right</legend>
+        <div class="row">
+          <input maxlength=1 required type="text" name="right-1"></input>
+          <input maxlength=1 required type="text" name="right-2"></input>
+          <input maxlength=1 required type="text" name="right-3"></input>
+        </div>
+      </formfield>
+      <formfield>
+        <legend>Bottom</legend>
+        <div class="row">
+          <input maxlength=1 required type="text" name="bottom-1"></input>
+          <input maxlength=1 required type="text" name="bottom-2"></input>
+          <input maxlength=1 required type="text" name="bottom-3"></input>
+        </div>
+      </formfield>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
     <div class="card-container">
       <div class="card">
         <ul id="list-0"></ul>
@@ -42,13 +64,71 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
         <ul id="list-3"></ul>
       </div>
     </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
   </div>
 `
 
-letters.forEach((_, i) => {
-  const words = getWordsBySide(trie, letters, i)
-  setupList(document.querySelector<HTMLUListElement>('#list-' + i.toString())!, words)
+const form: HTMLFormElement = document.getElementById("letter-form") as HTMLFormElement
+form?.addEventListener("submit", (e: SubmitEvent) => {
+  e.preventDefault()
+  e.stopPropagation()
+
+  const formData = new FormData(form)
+  const letters: (string | undefined)[][] = [
+    [formData.get("top-1")?.toString().toLowerCase(),
+    formData.get("top-2")?.toString().toLowerCase(),
+    formData.get("top-3")?.toString().toLowerCase()
+    ],
+    [formData.get("right-1")?.toString().toLowerCase(),
+    formData.get("right-2")?.toString().toLowerCase(),
+    formData.get("right-3")?.toString().toLowerCase()
+    ],
+    [formData.get("bottom-1")?.toString().toLowerCase(),
+    formData.get("bottom-2")?.toString().toLowerCase(),
+    formData.get("bottom-3")?.toString().toLowerCase()
+    ],
+    [formData.get("left-1")?.toString().toLowerCase(),
+    formData.get("left-2")?.toString().toLowerCase(),
+    formData.get("left-3")?.toString().toLowerCase()
+    ],
+  ]
+
+  for (let i = 0; i < letters.length; i++) {
+    for (let j = 0; j < letters[i].length; j++) {
+      if (!letters[i][j]) {
+        alert("Missing letters")
+        return
+      }
+    }
+  }
+
+  const wordsBySide: string[][] = []
+
+  letters.forEach((_, i) => {
+    const words = getWordsBySide(trie, letters as string[][], i)
+    wordsBySide.push(words)
+  })
+
+  const allLetters: string[] = letters.flat()
+  const allWords: string[] = wordsBySide.flat()
+  const result: string[] = []
+
+  for (let k = 0; k < allWords.length - 1; k++) {
+    for (let j = k + 1; j < allWords.length; j++) {
+      if (allWords[k][allWords[k].length - 1] === allWords[j][0]) {
+        if (containsAllLetters(allLetters, allWords[k], allWords[j])) {
+          result.push(allWords[k] + "-" + allWords[j])
+        }
+      }
+      
+      if (allWords[j][allWords[j].length - 1] === allWords[k][0]) {
+        if (containsAllLetters(allLetters, allWords[j], allWords[k])) {
+          result.push(allWords[j] + "-" + allWords[k])
+        }
+      }
+    }
+  }
+
+  console.log(result)
+  setupList(document.querySelector<HTMLUListElement>('#list-0')!, sortArrayByLength(result).reverse())
+
 })
