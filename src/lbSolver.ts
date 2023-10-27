@@ -1,22 +1,5 @@
 import Trie from "./trie"
-
-/*
- [
-    ["r", "u", "d"], 
-    ["n", "m", "g"], 
-    ["f", "i", "o"], 
-    ["a", "p", "l"],
-]
-*/
 type Letters = Array<Array<string>>
-
-/*
-const getOtherSides = (letters: Letters, i: number): Letters => letters.filter((_, idx) => idx !== i)
-const getOtherLetters = (letters: Letters, i: number): string[] => {
-    const otherSides = getOtherSides(letters, i)
-    return otherSides.flat(1)
-}
-*/
 
 type FindByPrefix = {
     prefix: string, letters: Letters, currentSide: number, trie: Trie, words: string[]
