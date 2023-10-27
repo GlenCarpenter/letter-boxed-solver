@@ -11,6 +11,8 @@ const form: HTMLFormElement = document.getElementById("letter-form") as HTMLForm
 form?.addEventListener("submit", (e: SubmitEvent) => {
   e.preventDefault()
   e.stopPropagation()
+  const cardContainer = document.querySelector<HTMLDivElement>('#list-cards')!
+  cardContainer.innerHTML = ""
 
   const formData = new FormData(form)
   const letters: (string | undefined)[][] = [
@@ -82,11 +84,10 @@ form?.addEventListener("submit", (e: SubmitEvent) => {
   }
   console.timeEnd("test")
 
-  const cardContainer = document.querySelector<HTMLDivElement>('#list-cards')!
-  cardContainer.innerHTML = ""
-  setupList(cardContainer, sortArrayByLength(singleWordResult).reverse(), "Single word solutions", "No single word solutions found.")
-  setupList(cardContainer, sortArrayByLength(twoWordResult).reverse(), "Two-word solutions", "No two-word solutions found.")
 
+  setupList(cardContainer, sortArrayByLength(singleWordResult).reverse(), "Single word solutions", "No single word solutions found.")
+  setupList(cardContainer, sortArrayByLength(twoWordResult).reverse(), "Two-word solutions", "No two-word solutions found.", 2)
+  cardContainer.scrollIntoView({behavior: "smooth"});
 })
 
 // Autofocus logic
