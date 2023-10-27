@@ -54,15 +54,6 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
       <div class="card">
         <ul id="list-0"></ul>
       </div>
-      <div class="card">
-        <ul id="list-1"></ul>
-      </div>
-      <div class="card">
-        <ul id="list-2"></ul>
-      </div>
-      <div class="card">
-        <ul id="list-3"></ul>
-      </div>
     </div>
   </div>
 `
@@ -108,7 +99,7 @@ form?.addEventListener("submit", (e: SubmitEvent) => {
     wordsBySide.push(words)
   })
 
-  const allLetters: string[] = letters.flat()
+  const allLetters: string[] = letters.flat().map(el => el ? el : "")
   const allWords: string[] = wordsBySide.flat()
   const result: string[] = []
 
@@ -128,7 +119,6 @@ form?.addEventListener("submit", (e: SubmitEvent) => {
     }
   }
 
-  console.log(result)
   setupList(document.querySelector<HTMLUListElement>('#list-0')!, sortArrayByLength(result).reverse())
 
 })
