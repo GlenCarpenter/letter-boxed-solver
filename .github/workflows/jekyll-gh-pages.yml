@@ -30,11 +30,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Set up Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: 'npm'
       - name: pNPM Setup
         # You may pin to the exact commit or the version.
         # uses: DerYeger/pnpm-setup-action@9e328324974df35a054c65f883302ad1bc26bd41
