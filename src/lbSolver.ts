@@ -53,17 +53,18 @@ export const getBinaryMask = (word: string): number => {
     if (maskMap[word]) {
         return maskMap[word]
     }
-    let mask: string[] = [...baseMask]
+    const seen = new Set()
+    let mask = 0
     for (let i = 0; i < word.length; i++) {
         let idx = word.charCodeAt(i) - 97
-        mask[25 - idx] = "1"
+        if(!seen.has(idx)){
+            seen.add(idx)
+            mask += 1 << idx
+        }
     }
 
-    const maskString = mask.join("")
-    const maskNum = parseInt(maskString, 2)
-
-    maskMap[word] = maskNum
-    return maskNum
+    maskMap[word] = mask
+    return mask
 }
 
 export const singleWordContainsAllLetters = (
