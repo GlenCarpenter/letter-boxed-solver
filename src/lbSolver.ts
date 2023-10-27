@@ -43,29 +43,47 @@ export const getWordsBySide = (trie: Trie, letters: Letters, currentSide: number
     return sortArrayByLength(words.filter(onlyUnique))
 }
 
-export const getBinaryMask = (word: string): string => {
-    let mask: string[] = []
-    for(let m = 0; m < 26; m++){
-        mask.push("0")
+const maskMap: { [key: string]: number } = {}
+const baseMask: string[] = []
+for (let m = 0; m < 26; m++) {
+    baseMask.push("0")
+}
+
+export const getBinaryMask = (word: string): number => {
+    if (maskMap[word]) {
+        return maskMap[word]
     }
+    let mask: string[] = [...baseMask]
     for (let i = 0; i < word.length; i++) {
         let idx = word.charCodeAt(i) - 97
         mask[25 - idx] = "1"
     }
 
     const maskString = mask.join("")
+    const maskNum = parseInt(maskString, 2)
 
-    return maskString
+    maskMap[word] = maskNum
+    return maskNum
+}
+
+export const singleWordContainsAllLetters = (
+    letters: string,
+    wordA: string): boolean => {
+
+    const lettersMask = getBinaryMask(letters)
+    const maskA = getBinaryMask(wordA)
+
+    return maskA === lettersMask
 }
 
 export const containsAllLetters = (
-    letters: string[],
+    letters: string,
     wordA: string,
     wordB: string): boolean => {
 
-    const lettersMask = parseInt(getBinaryMask(letters.join("")), 2)
-    const maskA = parseInt(getBinaryMask(wordA), 2)
-    const maskB = parseInt(getBinaryMask(wordB), 2)
+    const lettersMask = getBinaryMask(letters)
+    const maskA = getBinaryMask(wordA)
+    const maskB = getBinaryMask(wordB)
 
     return (maskA | maskB) === lettersMask
 }

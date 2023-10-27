@@ -48,6 +48,7 @@ h1 {
 
 .card-container {
   display: flex;
+  flex-direction: column;
   padding: 2em;
   align-items: center;
   justify-content: center;
@@ -74,7 +75,7 @@ li {
   background-color: rgba(255, 255, 255, 0.87);
 }
 
-legend {
+legend, p {
   font-size: 1em;
   font-weight: 700;
   font-family: inherit;
