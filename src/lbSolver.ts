@@ -53,14 +53,10 @@ export const getBinaryMask = (word: string): number => {
     if (maskMap[word]) {
         return maskMap[word]
     }
-    const seen = new Set()
     let mask = 0
     for (let i = 0; i < word.length; i++) {
         let idx = word.charCodeAt(i) - 97
-        if(!seen.has(idx)){
-            seen.add(idx)
-            mask += 1 << idx
-        }
+        mask |= (1 << idx)
     }
 
     maskMap[word] = mask
