@@ -1,7 +1,7 @@
 import { setupList } from './lists.ts'
 import { initTrie } from './init.ts'
 import wordsData from "./data/words_array.json"
-import { containsAllLetters, getWordsBySide, singleWordContainsAllLetters, sortArrayByLength } from './lbSolver.ts'
+import { containsAllLetters, getBinaryMask, getWordsBySide, singleWordContainsAllLetters, sortArrayByLength } from './lbSolver.ts'
 
 const { data } = wordsData as { data: string[] }
 
@@ -54,32 +54,32 @@ form?.addEventListener("submit", (e: SubmitEvent) => {
     wordsBySide.push(words)
   })
 
-  const allLetters: string = letters.flat().map(el => el ? el : "").join("")
+  const lettersMask: number = getBinaryMask(letters.flat().map(el => el ? el : "").join(""))
   const allWords: string[] = wordsBySide.flat()
   const singleWordResult: string[] = []
   const twoWordResult: string[] = []
 
   console.time("test")
   for (let k = 0; k < allWords.length - 1; k++) {
-    if (singleWordContainsAllLetters(allLetters, allWords[k])) {
+    if (singleWordContainsAllLetters(lettersMask, allWords[k])) {
       singleWordResult.push(allWords[k])
     }
     for (let j = k + 1; j < allWords.length; j++) {
       if (allWords[k][allWords[k].length - 1] === allWords[j][0]) {
-        if (containsAllLetters(allLetters, allWords[k], allWords[j])) {
+        if (containsAllLetters(lettersMask, allWords[k], allWords[j])) {
           twoWordResult.push(allWords[k] + "-" + allWords[j])
         }
       }
 
       if (allWords[j][allWords[j].length - 1] === allWords[k][0]) {
-        if (containsAllLetters(allLetters, allWords[j], allWords[k])) {
+        if (containsAllLetters(lettersMask, allWords[j], allWords[k])) {
           twoWordResult.push(allWords[j] + "-" + allWords[k])
         }
       }
     }
   }
 
-  if (singleWordContainsAllLetters(allLetters, allWords[allWords.length - 1])) {
+  if (singleWordContainsAllLetters(lettersMask, allWords[allWords.length - 1])) {
     singleWordResult.push(allWords[allWords.length - 1])
   }
   console.timeEnd("test")
