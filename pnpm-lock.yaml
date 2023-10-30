@@ -322,3 +322,8 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
     dev: true
+
+  /word-list-json@0.2.0:
+    resolution: {integrity: sha512-A0ZuPMpXOjC8Wj0PxNWg5MB63AooXlGqaxCZOgr7anmDr4kEeP0arsaRRCSxahuZ3GVrd8OBZ+IBlpL6z7kb9A==}
+    engines: {node: '>=0.10.0'}
+    dev: false

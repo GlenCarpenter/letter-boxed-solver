@@ -1,11 +1,10 @@
 import { setupList } from './lists.ts'
 import { initTrie } from './init.ts'
-import wordsData from "./data/words_array.json"
+import words from "word-list-json"
 import { containsAllLetters, getBinaryMask, getWordsBySide, singleWordContainsAllLetters, sortArrayByLength } from './lbSolver.ts'
 
-const { data } = wordsData as { data: string[] }
 
-const trie = initTrie(data)
+const trie = initTrie(words)
 
 const form: HTMLFormElement = document.getElementById("letter-form") as HTMLFormElement
 form?.addEventListener("submit", (e: SubmitEvent) => {
@@ -58,7 +57,7 @@ form?.addEventListener("submit", (e: SubmitEvent) => {
   const allWords: string[] = wordsBySide.flat()
   const singleWordResult: string[] = []
   const twoWordResult: string[] = []
-
+  
   console.time("test")
   for (let k = 0; k < allWords.length - 1; k++) {
     if (singleWordContainsAllLetters(lettersMask, allWords[k])) {
